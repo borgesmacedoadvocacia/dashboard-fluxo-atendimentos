@@ -447,6 +447,8 @@
   .proj-conclusao b { color:var(--texto); }
   .resumo-item.destaque .resumo-valor { color:var(--azul-claro); }
   .modal { max-width: 1080px; }
+  #tabelaJanelas { min-width: 0; }
+  #tabelaJanelas td.janela-ativa { background: rgba(59,130,246,.10); }
   /* ── tabela de meses ── */
   th.dir, td.dir { text-align:right; }
   tbody tr.mes-ativo td { background:rgba(59,130,246,.10); }
@@ -530,18 +532,33 @@
   </section>
 
   <section class="secao">
-    <div class="secao-titulo">Projeção de recebimento do mês</div>
-    <div class="secao-sub">Oportunidades = soma das propostas dos atendimentos <b>realizados</b>. Potencial = reuniões realizadas × taxa de conversão ideal × ticket médio
-      (o cálculo é sempre pelo ticket médio). Faturado e recebido vêm do <b>Fluxo de Clientes</b> pela data do fechamento; recebido = pagamento confirmado.</div>
+    <div class="secao-titulo">Projeção de recebimento — últimos 30 e 60 dias</div>
+    <div class="secao-sub">Janela móvel contada da <b>data do atendimento até hoje</b> — não depende do mês marcado acima; o filtro de produto vale.
+      Oportunidades = soma das propostas dos atendimentos <b>realizados</b> na janela. Potencial = reuniões realizadas × taxa de conversão ideal × ticket médio
+      (o cálculo é sempre pelo ticket médio). Faturado e recebido vêm do <b>Fluxo de Clientes</b> pela data do fechamento dentro da mesma janela; recebido = pagamento confirmado.</div>
     <div class="card">
       <div class="proj-topo">
+        <div class="filtros" id="filtrosJanela" style="margin:0">
+          <button type="button" class="chip" data-dias="30">Últimos 30 dias</button>
+          <button type="button" class="chip" data-dias="60">Últimos 60 dias</button>
+          <div class="sep"></div>
+          <label class="filtro-campo">Outra janela <input type="number" class="campo-texto" id="janelaDias" min="1" max="365" step="1" /> dias</label>
+        </div>
         <label class="filtro-campo">Taxa de conversão ideal
           <input type="number" class="campo-texto" id="taxaIdeal" min="0" max="100" step="1" value="40" /> %
         </label>
         <span class="secao-sub" style="margin:0" id="notaTaxa"></span>
       </div>
+      <div class="secao-sub" id="subJanela">&mdash;</div>
       <div class="resumo-grid" id="projecao"></div>
       <div class="proj-conclusao" id="projConclusao"></div>
+      <div class="secao-sub" style="margin:1rem 0 .5rem 0"><b>30 × 60 dias lado a lado</b> — mesma regra, mesma taxa.</div>
+      <div class="tabela-wrap">
+        <table id="tabelaJanelas">
+          <thead><tr id="cabJanelas"></tr></thead>
+          <tbody id="corpoJanelas"></tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -1000,8 +1017,16 @@ const fmtData = d => d ? d.toLocaleDateString('pt-BR') : '—';
 const media = a => a.length ? a.reduce((s, v) => s + v, 0) / a.length : 0;
 const soma = (a, f) => a.reduce((s, x) => s + (f ? f(x) : x), 0);
 
-const FILTRO = { meses: new Set([chaveMes(hojeZerado())]), produtos: new Set(), taxa: 40 };
+const LS_JANELA = 'fluxo_atend_janela_dias';
+const FILTRO = { meses: new Set([chaveMes(hojeZerado())]), produtos: new Set(), taxa: 40, janela: 30 };
 try { const t = Number(localStorage.getItem(LS_TAXA)); if (t > 0 && t <= 100) FILTRO.taxa = t; } catch (e) {}
+try { const j = Number(localStorage.getItem(LS_JANELA)); if (j >= 1 && j <= 365) FILTRO.janela = j; } catch (e) {}
+/* Janela movel "ultimos N dias": do dia (hoje - N + 1) ate hoje, pela data do
+   atendimento (CRM) e pela data do fechamento (Fluxo de Clientes). */
+function janelaDias(n) {
+  const fim = hojeZerado(); const ini = new Date(fim); ini.setDate(ini.getDate() - n + 1);
+  return { dias: n, ini, fim, rotulo: 'últimos ' + n + ' dias (' + fmtData(ini) + ' a ' + fmtData(fim) + ')' };
+}
 
 /* ---------- leitura ---------- */
 async function lerAbasDe(sheetId, ranges) {
@@ -1118,8 +1143,10 @@ function fluxoNoRecorte(f, meses, produtos, base) {
   return [...produtos].some(p => paresProduto(base, p).has(f.chaveProd));
 }
 
-function analisar(base, meses, produtos, taxaPct) {
-  const leads = base.leads.filter(r => noRecorte(r, meses, produtos));
+const naJanela = (d, j) => d && d >= j.ini && d <= j.fim;
+function analisar(base, meses, produtos, taxaPct, janela) {
+  const leads = base.leads.filter(r => janela ? (naJanela(r.atendimento, janela) && (!produtos.size || produtos.has(r.produto)))
+                                              : noRecorte(r, meses, produtos));
   const realizadas = leads.filter(r => r.st === 'realizado');
   const noShow = leads.filter(r => r.st === 'no show' || r.st === 'noshow' || r.st === 'no-show');
   const remarcar = leads.filter(r => r.st === 'remarcar');
@@ -1130,7 +1157,8 @@ function analisar(base, meses, produtos, taxaPct) {
   const comValor = leads.filter(r => r.proposta > 0);
   const ticket = media(comValor.map(r => r.proposta));
   const realizadasComValor = realizadas.filter(r => r.proposta > 0);
-  const fluxo = base.fechamentos.filter(f => fluxoNoRecorte(f, meses, produtos, base));
+  const fluxo = base.fechamentos.filter(f => janela ? (naJanela(f.fechamento, janela) && fluxoNoRecorte(f, new Set([f.mes]), produtos, base))
+                                                    : fluxoNoRecorte(f, meses, produtos, base));
   const recebidos = fluxo.filter(f => f.confirmado);
   const taxa = (taxaPct || 0) / 100;
   const esperados = realizadas.length * taxa;
@@ -1158,7 +1186,7 @@ function render(base) {
   pintarChips(base);
   const a = analisar(base, FILTRO.meses, FILTRO.produtos, FILTRO.taxa);
   renderKPIs(base, a);
-  renderProjecao(base, a);
+  renderProjecao(base);
   renderGraficos(base, a);
   renderMeses(base);
   renderObs(base, a);
@@ -1196,8 +1224,16 @@ function montarControles(base) {
     if (!(v >= 0 && v <= 100)) return;
     FILTRO.taxa = v;
     try { localStorage.setItem(LS_TAXA, String(v)); } catch (e) {}
-    if (DADOS) { const a = analisar(DADOS, FILTRO.meses, FILTRO.produtos, FILTRO.taxa); renderProjecao(DADOS, a); }
+    if (DADOS) renderProjecao(DADOS);
   });
+  const boxJ = document.getElementById('filtrosJanela');
+  boxJ.addEventListener('click', ev => {
+    const b = ev.target.closest('.chip[data-dias]'); if (!b) return;
+    definirJanela(Number(b.dataset.dias));
+  });
+  const inpJ = document.getElementById('janelaDias');
+  inpJ.value = FILTRO.janela;
+  inpJ.addEventListener('change', () => { const v = Math.round(Number(inpJ.value)); if (v >= 1 && v <= 365) definirJanela(v); else inpJ.value = FILTRO.janela; });
   document.getElementById('corpoMeses').addEventListener('click', ev => {
     const tr = ev.target.closest('tr[data-mes]'); if (!tr) return;
     FILTRO.meses = new Set([tr.dataset.mes]);
@@ -1279,20 +1315,35 @@ function renderKPIs(base, a) {
   });
 }
 
-function renderProjecao(base, a) {
-  const rot = FILTRO.meses.size > 1 ? 'no período' : 'no mês';
+function definirJanela(dias) {
+  FILTRO.janela = dias;
+  try { localStorage.setItem(LS_JANELA, String(dias)); } catch (e) {}
+  const inp = document.getElementById('janelaDias'); if (inp) inp.value = dias;
+  if (DADOS) renderProjecao(DADOS);
+}
+
+/* Projeção em janela móvel (últimos N dias até hoje), independente do mês
+   marcado no menu. O filtro de produto continua valendo. */
+function renderProjecao(base) {
+  const jan = janelaDias(FILTRO.janela);
+  const a = analisar(base, null, FILTRO.produtos, FILTRO.taxa, jan);
+  document.querySelectorAll('#filtrosJanela .chip[data-dias]').forEach(c => c.classList.toggle('ativo', Number(c.dataset.dias) === FILTRO.janela));
+  const prod = FILTRO.produtos.size ? [...FILTRO.produtos].join(' + ') : 'todos os produtos';
+  document.getElementById('subJanela').innerHTML = 'Janela: <b>' + esc(jan.rotulo) + '</b> · <b>' + esc(prod) + '</b> · independe do mês marcado no menu';
+  const subLista = () => jan.rotulo + ' · ' + prod;
+  const lista = (titulo, linhas, cols, rodape) => abrirLista({ titulo, sub: subLista(), colunas: cols || COLS_LEAD, linhas: linhas.slice().sort(ordemData), rodape, limite: 500, vazio: 'Nenhum lead nesta janela.' });
   const itens = [
-    ['Reuniões realizadas', num(a.realizadas.length), 'base do cálculo', null, () => listaLeads('Reuniões realizadas', a.realizadas)],
-    ['Oportunidades ' + rot, moeda(a.oportunidades), a.realizadasSemValor ? a.realizadasSemValor + ' realizadas sem valor de proposta' : 'soma das propostas dos realizados', null,
-      () => listaLeads('Oportunidades — propostas dos atendimentos realizados', a.realizadasComValor.slice().sort((x, y) => y.proposta - x.proposta), COLS_LEAD, 'Total: <b>' + moeda(a.oportunidades) + '</b>')],
-    ['Ticket médio', a.comValor.length ? moeda(a.ticket) : '—', a.comValor.length + ' propostas com valor', null],
+    ['Reuniões realizadas', num(a.realizadas.length), 'atendimentos realizados na janela', null, () => lista('Reuniões realizadas — ' + jan.rotulo, a.realizadas)],
+    ['Oportunidades', moeda(a.oportunidades), a.realizadasSemValor ? a.realizadasSemValor + ' realizadas sem valor de proposta' : 'soma das propostas dos realizados', null,
+      () => lista('Oportunidades — propostas dos atendimentos realizados', a.realizadasComValor.slice().sort((x, y) => y.proposta - x.proposta), COLS_LEAD, 'Total: <b>' + moeda(a.oportunidades) + '</b>')],
+    ['Ticket médio', a.comValor.length ? moeda(a.ticket) : '—', a.comValor.length + ' propostas com valor na janela', null],
     ['Clientes esperados', a.esperados.toFixed(1).replace('.', ','), num(a.realizadas.length) + ' × ' + FILTRO.taxa + '%', null],
     ['Potencial de faturamento', moeda(a.potencial), 'esperados × ticket médio', COR_AZUL],
-    ['Faturado ' + rot, moeda(a.faturado), a.fluxo.length + ' fechamentos no Fluxo de Clientes', null,
-      () => abrirLista({ titulo: 'Faturado — fechamentos no Fluxo de Clientes', sub: subRecorte(), colunas: COLS_FLUXO,
+    ['Faturado na janela', moeda(a.faturado), a.fluxo.length + ' fechamentos no Fluxo de Clientes', null,
+      () => abrirLista({ titulo: 'Faturado — fechamentos no Fluxo de Clientes', sub: subLista(), colunas: COLS_FLUXO,
         linhas: a.fluxo.slice().sort((x, y) => x.fechamento - y.fechamento), rodape: 'Honorários iniciais: <b>' + moeda(a.faturado) + '</b>', limite: 500 })],
     ['Já recebido', moeda(a.recebido), a.recebidos.length + ' com pagamento confirmado', COR_VERDE,
-      () => abrirLista({ titulo: 'Recebido — pagamento confirmado', sub: subRecorte(), colunas: COLS_FLUXO,
+      () => abrirLista({ titulo: 'Recebido — pagamento confirmado', sub: subLista(), colunas: COLS_FLUXO,
         linhas: a.recebidos.slice().sort((x, y) => x.fechamento - y.fechamento), rodape: 'Recebido: <b>' + moeda(a.recebido) + '</b>', limite: 500 })],
     [a.falta >= 0 ? 'Falta em oportunidades reais' : 'Acima do potencial', moeda(Math.abs(a.falta)), 'potencial − faturado', a.falta >= 0 ? COR_AMARELO : COR_VERDE]
   ];
@@ -1302,16 +1353,35 @@ function renderProjecao(base, a) {
     '<div class="resumo-nome"' + (cor ? ' style="color:' + cor + '"' : '') + '>' + n + '</div>' +
     '<div class="resumo-valor">' + v + '</div><div class="resumo-nota">' + esc(nota) + '</div></div>').join('');
   box.querySelectorAll('.item-clicavel').forEach(el => { el.title = 'Clique para ver os registros'; el.addEventListener('click', () => itens[Number(el.dataset.i)][4]()); });
-  document.getElementById('notaTaxa').textContent = 'A taxa fica salva neste navegador.';
+  document.getElementById('notaTaxa').textContent = 'Taxa e janela ficam salvas neste navegador.';
+
   const c = document.getElementById('projConclusao');
-  if (!a.realizadas.length) { c.className = 'proj-conclusao'; c.innerHTML = 'Sem reuniões realizadas no recorte — não há base para projetar.'; return; }
-  if (!a.comValor.length) { c.className = 'proj-conclusao'; c.innerHTML = 'Há <b>' + a.realizadas.length + '</b> reuniões realizadas, mas nenhuma proposta com valor no recorte: preencha a coluna <b>Valor da Proposta</b> no CRM para o ticket médio e a projeção existirem.'; return; }
-  c.className = 'proj-conclusao' + (a.falta <= 0 ? ' bom' : '');
-  c.innerHTML = 'Com <b>' + a.realizadas.length + '</b> reuniões realizadas e taxa ideal de <b>' + FILTRO.taxa + '%</b>, o esperado seria <b>' +
-    a.esperados.toFixed(1).replace('.', ',') + ' clientes</b> × ticket médio de <b>' + moeda(a.ticket) + '</b> = <b>' + moeda(a.potencial) + '</b>. ' +
-    'Faturado no Fluxo de Clientes: <b>' + moeda(a.faturado) + '</b> (recebido ' + moeda(a.recebido) + ')' +
-    (a.falta > 0 ? ' → <b>faltam ' + moeda(a.falta) + '</b> em oportunidades reais.' : ' → <b>acima do potencial em ' + moeda(-a.falta) + '</b>.') +
-    (a.realizadasSemValor ? ' <span class="sub">Atenção: ' + a.realizadasSemValor + ' reuniões realizadas ainda sem valor de proposta.</span>' : '');
+  if (!a.realizadas.length) { c.className = 'proj-conclusao'; c.innerHTML = 'Sem reuniões realizadas nos ' + jan.dias + ' dias — não há base para projetar.'; }
+  else if (!a.comValor.length) { c.className = 'proj-conclusao'; c.innerHTML = 'Há <b>' + a.realizadas.length + '</b> reuniões realizadas nos ' + jan.dias + ' dias, mas nenhuma proposta com valor: preencha a coluna <b>Valor da Proposta</b> no CRM para o ticket médio e a projeção existirem.'; }
+  else {
+    c.className = 'proj-conclusao' + (a.falta <= 0 ? ' bom' : '');
+    c.innerHTML = 'Nos <b>' + jan.dias + ' dias</b> (' + fmtData(jan.ini) + ' a ' + fmtData(jan.fim) + '): <b>' + a.realizadas.length + '</b> reuniões realizadas × taxa ideal de <b>' + FILTRO.taxa + '%</b> = <b>' +
+      a.esperados.toFixed(1).replace('.', ',') + ' clientes</b> × ticket médio de <b>' + moeda(a.ticket) + '</b> = <b>' + moeda(a.potencial) + '</b>. ' +
+      'Faturado no Fluxo de Clientes na mesma janela: <b>' + moeda(a.faturado) + '</b> (recebido ' + moeda(a.recebido) + ')' +
+      (a.falta > 0 ? ' → <b>faltam ' + moeda(a.falta) + '</b> em oportunidades reais.' : ' → <b>acima do potencial em ' + moeda(-a.falta) + '</b>.') +
+      (a.realizadasSemValor ? ' <span class="sub">Atenção: ' + a.realizadasSemValor + ' reuniões realizadas ainda sem valor de proposta.</span>' : '');
+  }
+
+  /* comparação fixa 30 × 60 (mais a janela escolhida, se for outra) */
+  const dias = [...new Set([30, 60, FILTRO.janela])].sort((x, y) => x - y);
+  const cols = dias.map(d => ({ d, x: d === FILTRO.janela ? a : analisar(base, null, FILTRO.produtos, FILTRO.taxa, janelaDias(d)) }));
+  const linha = (rot, f) => '<tr><td>' + rot + '</td>' + cols.map(cc => '<td class="dir' + (cc.d === FILTRO.janela ? ' janela-ativa' : '') + '">' + f(cc.x) + '</td>').join('') + '</tr>';
+  document.getElementById('cabJanelas').innerHTML = '<th>Indicador</th>' + cols.map(cc => '<th class="dir">Últimos ' + cc.d + ' dias</th>').join('');
+  document.getElementById('corpoJanelas').innerHTML =
+    linha('Reuniões realizadas', x => num(x.realizadas.length)) +
+    linha('Oportunidades (propostas dos realizados)', x => moedaCurta(x.oportunidades)) +
+    linha('Realizadas sem valor de proposta', x => num(x.realizadasSemValor)) +
+    linha('Ticket médio', x => x.comValor.length ? moeda(x.ticket) : '—') +
+    linha('Clientes esperados (× ' + FILTRO.taxa + '%)', x => x.esperados.toFixed(1).replace('.', ',')) +
+    linha('Potencial de faturamento', x => '<b>' + moedaCurta(x.potencial) + '</b>') +
+    linha('Faturado (Fluxo de Clientes)', x => moedaCurta(x.faturado) + ' <span class="sub">(' + x.fluxo.length + ')</span>') +
+    linha('Já recebido', x => moedaCurta(x.recebido)) +
+    linha('Falta em oportunidades reais', x => '<span class="' + (x.falta > 0 ? 'val-neg' : 'val-pos') + '">' + moedaCurta(x.falta) + '</span>');
 }
 
 function renderGraficos(base, a) {

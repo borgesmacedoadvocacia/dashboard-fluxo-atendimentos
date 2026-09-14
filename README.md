@@ -29,19 +29,23 @@ neste painel. Entra-se pela [Central de Dashboards](https://borgesmacedoadvocaci
 Todo cartão abre a lista dos leads por trás do número (nome, produto, SDR, closer, datas,
 status, proposta, telefone; nas negociações também próximo contato e o que está travando).
 
-## Projeção de recebimento do mês
+## Projeção de recebimento — últimos 30 e 60 dias
+
+Janela **móvel**, contada da data do atendimento até hoje (não depende do mês marcado no menu;
+o filtro de produto vale). Botões de 30 e 60 dias, campo livre para outra janela, e uma tabela
+30 × 60 lado a lado. A taxa de conversão ideal e a janela escolhida ficam salvas no navegador.
 
 ```
-Oportunidades      = soma das propostas dos atendimentos REALIZADOS
-Clientes esperados = reuniões realizadas × taxa de conversão ideal (campo manual, salvo no navegador)
-Potencial          = clientes esperados × ticket médio            ← sempre pelo ticket médio
-Faturado           = honorários iniciais dos fechamentos do mês (Fluxo de Clientes, data do fechamento)
+Oportunidades      = soma das propostas dos atendimentos REALIZADOS na janela
+Clientes esperados = reuniões realizadas na janela × taxa de conversão ideal
+Potencial          = clientes esperados × ticket médio da janela      ← sempre pelo ticket médio
+Faturado           = honorários iniciais dos fechamentos da janela (Fluxo de Clientes, data do fechamento)
 Recebido           = idem, só com PAGAMENTO CONFIRMADO = Sim
 Falta              = potencial − faturado
 ```
 
-Exemplo: 37 reuniões realizadas × 40% = 14,8 clientes × ticket médio R$ 3.107 = R$ 45.989 de
-potencial; faturado R$ 21.000 → faltam R$ 24.989 em oportunidades reais.
+Exemplo (30 dias): 75 reuniões realizadas × 40% = 30 clientes × ticket médio R$ 3.627 = R$ 108.810
+de potencial; faturado R$ 52.470 → faltam R$ 56.340 em oportunidades reais.
 
 Quando um produto é filtrado, o Fluxo de Clientes é casado por palavras-chave
 (`Rev. Plano de Saúde` ↔ `Revisional de Plano de Saúde`; `Rev. Financiamento Imobiliário` ↔
