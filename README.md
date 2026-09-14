@@ -4,9 +4,8 @@ Painel mensal dos atendimentos comerciais do escritório Borges Macedo Advocacia
 tempo real da planilha **CRM - BM Advocacia** (aba `Fluxo de Atendimentos`) e, para faturado
 e recebido, da planilha **Fluxo de Clientes 2026** (aba `DADOS`).
 
-**Acesso exclusivo das lideranças.** Os perfis Administração e Lideranças têm cofre neste
-painel; a credencial do perfil Equipe não decifra nada. Entra-se pela
-[Central de Dashboards](https://borgesmacedoadvocacia.github.io/).
+**Acesso geral.** Os três perfis da Central — Administração, Lideranças e Equipe — têm cofre
+neste painel. Entra-se pela [Central de Dashboards](https://borgesmacedoadvocacia.github.io/).
 
 ## Regras de cálculo
 

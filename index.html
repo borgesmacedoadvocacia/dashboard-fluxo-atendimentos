@@ -478,7 +478,7 @@
     <div class="login-erro oculto" id="loginErro"></div>
 
     <div class="login-rodape">
-      Painel exclusivo das lideranças.<br />
+      Acesso de toda a equipe.<br />
       A sessão termina ao fechar a aba.
     </div>
   </form>
@@ -596,9 +596,11 @@
    ========================================================================= */
 const COFRES = [
 /* Administração */
-  {"v":1,"it":310000,"salt":"T+O3cmAiOhd1pHu0TyNSjA==","iv":"H7K0v6ZxBBPKNcAj","ct":"7nVEkqsovkuy1ZmW28SFWdPpaZYoahvdRQlSanI+aTLOQOzdOfhuxWbVejSrkyyrecPq9c6sStwObvSurE7J0jZSDzGQn971WFT/3b3h9t897xAA/zZ45I2JEuP4xtWIK9U+G0GjKT3aK5mU0jZMuSzevnYhWdndaL1LR4vf8TsSsiAQZwOxFb1NuF8DG49PeLtYJqeayHVJOW+Rq7D6rGLxdQ5Ai6bS0nr9QUTPbKdWo7x9XPnqztSFfQj4hEXRzwZLndWD"},
+  {"v":1,"it":310000,"salt":"QD6D9S+V9OJu6gPB6oHJQA==","iv":"FrQdZGrFa4Ak8PUT","ct":"hsxEbMnCzDYqdPcTh23mvYoSb23nPotyl4iIQ8jN5tpiWYd8BPNW9KHGozNzv53gG8vgvZtefaaBwtV+sUuM3JYZAm++rrTGZHxTAWcY/cRnVps3ogefavlmVAAyEibea1/QpZe4wbTKRsvsxMeYe9eP4qvfKcNBRlba9YzQ/joXQCjTmLkZ3C4YHUdI69QQrRDA3xA11hmTDqU5BjV4HGlhqwc8TlJ4CexugV8szg+EOr7h+DWAsqpyVqk0HwMEsgmGYXwu"},
   /* Lideranças */
-  {"v":1,"it":310000,"salt":"MlfyVnuRGDYO/Hz4iyOMNA==","iv":"6PbLog7fABPFj9T9","ct":"WnJsc66O9HRbjfWdRo1j+MidpO6+1K61UUilbvNrNC41dtCGcOeUDrq52SXhTL2R3++d1JD/sfFmlT4Nr11fZ67WVYpN/ddGzMMCeVfSWObqa46tiQtXlSeb9d/nSU+vVY9r5Co+oK7eTYh4nT8tdvRutId3xlMm31CZYyHrSqSNHxDTn8bzPPOe9TwYcaqdi1yTlVSS5W3UTMxmd8FxAscZfQX2hAsuPVPSm3XTb+fq0eJGlD43VGhbP1kYbhDaKQCECHVQ"}
+  {"v":1,"it":310000,"salt":"AEchF5WDBYU3+riH7+2eyw==","iv":"iAyRHF2pLFYDx/FJ","ct":"hPnM1kIOpkINL2GMD4psIINlTcQ0ysCBU9Uo2+zvOxI1X27NwKMQ9gkYHCwJitAVRZYnezfJmM38NmJUvggtH6R0w4cv7tjtFn/eYME1c8MsY4q1ASvswEwPELgoQGEGO4lCyPTuz7KCrv2sUJ3XyHWqieyAa2coED/W1MESRIuTAYWSQf8nquknzm41BKnPbc5ygZT8j1LPrcYi/yDp3BbSrPF+gy1B1vDnUiQgGG3jnzN1x1hW2kFzuEvn0zIMF56Xjs5v"},
+  /* Equipe */
+  {"v":1,"it":310000,"salt":"RKqzaPtu5rD20X+R2erVqQ==","iv":"n2eFf6tmm3SpDT1M","ct":"KA4O/eWduzjwZPBte72qJqFIOYhifpZodVf75kaUkaU8pGgl33T4OBBAG2Fd8rn20hq4pV2w66csUscCESpVDCMZ0f/67FNg0SI8nVaes+BDCCrHY8SJvFIq2gBh9jqqwDFmE/HI+/KcOitjn7CYo6pPlnALJ6h9ehxQIaibxCSetPsTNxZ3XyFxuiXbq17pVkm9mXP3Ybcn4dlkIq4xdyF6UQIUtSXBCqyi48/CeW2W6FOCaN2+heg1jcfDtix2NKAaPU0W"}
 ];
 
 const b64bytes = b64 => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
