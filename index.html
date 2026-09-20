@@ -415,9 +415,14 @@
   }
   .modal-tabela thead th.dir, .modal-tabela td.dir { text-align: right; }
   .modal-tabela tbody td {
-    padding: .5rem .7rem; border-bottom: 1px solid rgba(30,45,74,.5);
-    vertical-align: top; line-height: 1.45;
+    padding: .45rem .6rem; border-bottom: 1px solid rgba(30,45,74,.5);
+    vertical-align: top; line-height: 1.4;
+    /* o CSS base alinha td à direita e proíbe quebra (tabelas numéricas);
+       nas listas do modal o texto é longo: alinha à esquerda, quebra e limita a largura */
+    text-align: left; white-space: normal; max-width: 260px; min-width: 90px; overflow-wrap: break-word;
   }
+  .modal-tabela thead th { white-space: normal; text-align: left; }
+  .modal-tabela td .mono, .modal-tabela td.nowrap { white-space: nowrap; overflow-wrap: normal; }
   .modal-tabela tbody tr:last-child td { border-bottom: none; }
   .modal-tabela tbody tr:hover { background: rgba(255,255,255,.03); }
   .modal-lista-nota { font-size: .74rem; color: var(--texto-muted); margin-top: .55rem; }
