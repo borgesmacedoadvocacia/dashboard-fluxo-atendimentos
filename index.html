@@ -588,7 +588,7 @@
         <table id="tabelaMeses">
           <thead><tr>
             <th>Mês</th><th class="dir">Agendadas</th><th class="dir">Realizadas</th><th class="dir">Comparec.</th>
-            <th class="dir">No-show</th><th class="dir">Remarcar</th><th class="dir">Em negociação</th><th class="dir">Valores em neg.</th>
+            <th class="dir">Perdidos</th><th class="dir">Remarcar</th><th class="dir">Em negociação</th><th class="dir">Valores em neg.</th>
             <th class="dir">Ganhos (CRM)</th><th class="dir">Ticket médio</th><th class="dir">Faturado</th><th class="dir">Recebido</th>
           </tr></thead>
           <tbody id="corpoMeses"></tbody>
@@ -618,11 +618,11 @@
    ========================================================================= */
 const COFRES = [
 /* Administração */
-  {"v":1,"it":310000,"salt":"QD6D9S+V9OJu6gPB6oHJQA==","iv":"FrQdZGrFa4Ak8PUT","ct":"hsxEbMnCzDYqdPcTh23mvYoSb23nPotyl4iIQ8jN5tpiWYd8BPNW9KHGozNzv53gG8vgvZtefaaBwtV+sUuM3JYZAm++rrTGZHxTAWcY/cRnVps3ogefavlmVAAyEibea1/QpZe4wbTKRsvsxMeYe9eP4qvfKcNBRlba9YzQ/joXQCjTmLkZ3C4YHUdI69QQrRDA3xA11hmTDqU5BjV4HGlhqwc8TlJ4CexugV8szg+EOr7h+DWAsqpyVqk0HwMEsgmGYXwu"},
+  {"v":1,"it":310000,"salt":"cJ08PZqQdsGLDJSKkylUeA==","iv":"9c8KKrUFAOMNwPGL","ct":"d5BmNWovfEGvVQeKBHEpmKogL1x5cgRhI/CmVFHEOaieGOwFuNLAcPRCoJJRD4lBdhJb//kk4mWgKCegXMWW91pEHOmlhwvaZrmrcUT3dQG+gop3dHZtCd400ZzqRIoBecR49LGIv5K5/Ot3AJxDSTVkNhOEOE474ATqrbxqAq4ZwA79iwfjEqyIhKBgBYavAbkiDRb8ss3jPpTmZQLWQETXZ074UDoLB2VwnJuaUnT8sPS738BiJiz6kCfRmvE5dkGc/Hgt"},
   /* Lideranças */
-  {"v":1,"it":310000,"salt":"AEchF5WDBYU3+riH7+2eyw==","iv":"iAyRHF2pLFYDx/FJ","ct":"hPnM1kIOpkINL2GMD4psIINlTcQ0ysCBU9Uo2+zvOxI1X27NwKMQ9gkYHCwJitAVRZYnezfJmM38NmJUvggtH6R0w4cv7tjtFn/eYME1c8MsY4q1ASvswEwPELgoQGEGO4lCyPTuz7KCrv2sUJ3XyHWqieyAa2coED/W1MESRIuTAYWSQf8nquknzm41BKnPbc5ygZT8j1LPrcYi/yDp3BbSrPF+gy1B1vDnUiQgGG3jnzN1x1hW2kFzuEvn0zIMF56Xjs5v"},
+  {"v":1,"it":310000,"salt":"l07LvMnTSoiXiCLieSZc6g==","iv":"XWliG7s4f/A+WlLj","ct":"eAJ4B6JD9vLt4cFO+FXAt4sn9qUsDG2ehqYkmbpQ2B7RWoejRtzDHnlo79yGUvsZ2rY3wvnVlkaJYXdjCmY8aB1Bn4JaWWsH0NL352QanSkQ0hjyG2y0AoZp726twjTPpeC53OeQfETscz4T3CrQNAzXL8qfUCzWJqKzqfARb+NZQolzsttWSFa4ZbaMEYHv00Zs9sTB/R3bTvdgMxmxaYf+59aPoie+sFORsU7g3JeDFOddbA5/mE/xrpkbD/wSTLjYcXko"},
   /* Equipe */
-  {"v":1,"it":310000,"salt":"RKqzaPtu5rD20X+R2erVqQ==","iv":"n2eFf6tmm3SpDT1M","ct":"KA4O/eWduzjwZPBte72qJqFIOYhifpZodVf75kaUkaU8pGgl33T4OBBAG2Fd8rn20hq4pV2w66csUscCESpVDCMZ0f/67FNg0SI8nVaes+BDCCrHY8SJvFIq2gBh9jqqwDFmE/HI+/KcOitjn7CYo6pPlnALJ6h9ehxQIaibxCSetPsTNxZ3XyFxuiXbq17pVkm9mXP3Ybcn4dlkIq4xdyF6UQIUtSXBCqyi48/CeW2W6FOCaN2+heg1jcfDtix2NKAaPU0W"}
+  {"v":1,"it":310000,"salt":"xMoRb8tJsJwQ2lHnt+bfEQ==","iv":"9UNfz0IELc/QqAkf","ct":"SwjICAtPLuaLl7g6NMgyx8YPW2GhFB13ahYQU3hyCKN+2vxBlEkrJs6hLc5vHEGH9qjapMR9Qy4TlZ3ozitPnIfryROtZQfjqv0lE1YCXrSm/4BBNTa3e7j97gScPcA+xdbUCvIhAg4+fXgl5S0eFNbNLKPSOrJje6hLSLYX5aZkXSSecaE+nWVBG/AAISoaOFMXM7XIfUJPIEXZk/WhVM1oFGCxUCGRo944PixTz87O5x+J5x3At4n1fz6s2aqgAAu3SR7q"}
 ];
 
 const b64bytes = b64 => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
@@ -1010,7 +1010,7 @@ function ligarKPIs(mapa) {
    recebido por data do fechamento). O mês de cada medida é sempre o da
    Data do Atendimento.
    ========================================================================= */
-const ABA_CRM = "'Fluxo de Atendimentos '";     // o nome da aba tem um espaço no fim
+const ABA_CRM = "'Fluxo de Atendimentos'";
 const ABA_FLUXO = "'DADOS'";
 const INICIO = new Date(2026, 0, 1);
 const LS_TAXA = 'fluxo_atend_taxa_ideal';
@@ -1021,6 +1021,7 @@ const rotuloMesCurto = k => MESES_CURTO[Number(k.slice(5, 7)) - 1] + '/' + k.sli
 const fmtData = d => d ? d.toLocaleDateString('pt-BR') : '—';
 const media = a => a.length ? a.reduce((s, v) => s + v, 0) / a.length : 0;
 const soma = (a, f) => a.reduce((s, x) => s + (f ? f(x) : x), 0);
+const ehSim = v => /^(sim|true|verdadeiro|x|1)$/i.test(String(v || '').trim());
 
 const LS_JANELA = 'fluxo_atend_janela_dias';
 const FILTRO = { meses: new Set([chaveMes(hojeZerado())]), produtos: new Set(), taxa: 40, janela: 30 };
@@ -1046,7 +1047,9 @@ async function lerAbasDe(sheetId, ranges) {
 }
 
 async function buscarTudo() {
-  const [crm] = await lerAbasDe(CONFIG.SHEET_ID, [ABA_CRM + '!A1:AI6000']);
+  /* intervalo largo de propósito: a planilha ganha colunas com frequência e o
+     mapeamento é por cabeçalho, então sobra espaço sem custo. */
+  const [crm] = await lerAbasDe(CONFIG.SHEET_ID, [ABA_CRM + '!A1:AZ3000']);
   let fluxo = [], fluxoErro = '';
   try { [fluxo] = await lerAbasDe(CONFIG.FLUXO_SHEET_ID, [ABA_FLUXO + '!A1:R3000']); }
   catch (e) { fluxoErro = e.message; }
@@ -1073,27 +1076,80 @@ function produtoCasa(chaveCrm, chaveFl) {
   return menor.every(t => maior.includes(t));
 }
 
+/* ---------- mapeamento das colunas ----------
+   A planilha é reorganizada com frequência (colunas novas no meio, campos
+   renomeados). Por isso cada campo é achado pelo NOME do cabeçalho — primeiro
+   igual, depois por palavras-chave — e nunca pela posição: uma coluna a mais no
+   começo faria o painel ler o campo errado sem avisar. */
+const CAMPOS_CRM = {
+  id:          { exato: ['id'] },
+  lead:        { exato: ['lead', 'cliente', 'nome do lead'] },
+  telefone:    { exato: ['telefone', 'whatsapp'] },
+  produto:     { exato: ['produto juridico'], contem: [['produto', 'juridico']], evitar: ['detalhe'] },
+  detalhes:    { contem: [['detalhe', 'produto']] },
+  etapa:       { exato: ['etapa do funil'], contem: [['etapa']] },
+  sdr:         { exato: ['sdr'] },
+  closer:      { exato: ['closer'] },
+  agendamento: { exato: ['data do agendamento'], contem: [['data', 'agendamento']] },
+  atendimento: { exato: ['data do atendimento'], contem: [['data', 'atendimento']] },
+  situacao:    { exato: ['status de fechamento', 'status do fechamento', 'situacao'], contem: [['status', 'fechamento']] },
+  proposta:    { exato: ['valor da proposta'], contem: [['proposta', 'inicia'], ['honorarios', 'inicia']] },
+  exito:       { contem: [['proposta', 'exito'], ['honorarios', 'exito']] },
+  motivoPerda: { contem: [['motivo', 'perda']] },
+  situacaoNeg: { contem: [['situacao', 'negociacao']] },
+  ligacao:     { contem: [['ligacao']] },
+  fup:         { contem: [['fup']] }
+};
+function mapearColunas(cab) {
+  const norm = cab.map(h => normTxt(h));
+  const usado = new Set(), idx = {};
+  const achar = (regra) => {
+    for (const nome of regra.exato || []) {
+      const i = norm.indexOf(nome);
+      if (i >= 0 && !usado.has(i)) return i;
+    }
+    for (const palavras of regra.contem || []) {
+      const i = norm.findIndex((h, k) => !usado.has(k) && h && palavras.every(w => h.includes(w)) &&
+        !(regra.evitar || []).some(w => h.includes(w)));
+      if (i >= 0) return i;
+    }
+    return -1;
+  };
+  Object.keys(CAMPOS_CRM).forEach(chave => {
+    const i = achar(CAMPOS_CRM[chave]);
+    idx[chave] = i;
+    if (i >= 0) usado.add(i);
+  });
+  idx._cab = cab;
+  idx._ausentes = ['lead', 'atendimento', 'situacao', 'proposta'].filter(k => idx[k] < 0)
+    .map(k => ({ lead: 'Lead', atendimento: 'Data do Atendimento', situacao: 'Status de Fechamento', proposta: 'Valor da Proposta (Honorários Iniciais)' })[k]);
+  return idx;
+}
+const cel = (l, idx, chave) => { const i = idx[chave]; if (i < 0) return ''; const v = l[i]; return v === undefined || v === null ? '' : String(v).trim(); };
+
 /* ---------- base ---------- */
 function montarBase(crm, fluxo, fluxoErro) {
   const c = crm.cab;
+  const IDX = mapearColunas(c);
   const todos = crm.linhas.map((l, i) => {
-    const agendamento = parseDataBR(campo(l, c, 'Data do Agendamento', 'F'));
-    const atendimento = parseDataBR(campo(l, c, 'Data do Atendimento', 'H'));
+    const situacao = cel(l, IDX, 'situacao');
     return {
       linha: i + 2,
-      lead: campo(l, c, 'Lead', 'A'), telefone: campo(l, c, 'Telefone', 'B'),
-      produto: campo(l, c, 'Produto Jurídico', 'C') || '(sem produto)',
-      sdr: campo(l, c, 'SDR', 'D'), closer: campo(l, c, 'Closer', 'E'),
-      agendamento, atendimento,
-      status: campo(l, c, 'Status do Atendimento', 'K'), fechamento: campo(l, c, 'Status de Fechamento', 'L'),
-      st: normTxt(campo(l, c, 'Status do Atendimento', 'K')), fe: normTxt(campo(l, c, 'Status de Fechamento', 'L')),
-      proposta: parseNumBR(campo(l, c, 'Valor da Proposta', 'M')),
-      ultimoContato: campo(l, c, 'Data do Último Contato', 'X') || campo(l, c, 'Data do Último Contato', 'W'),
-      proximoContato: campo(l, c, 'Data do Próximo Contato', 'Y'),
-      travando: campo(l, c, 'O que está travando o fechamento? [RESUMIR OBJETIVAMENTE]', 'Z'),
-      proximoPasso: campo(l, c, 'Próximo Passo Detalhado', 'AA'),
-      statusNegociacao: campo(l, c, 'Status da Negociação', 'AD'),
-      motivoNao: campo(l, c, 'Motivo de Não Fechamento', 'AF')
+      lead: cel(l, IDX, 'lead'), telefone: cel(l, IDX, 'telefone'),
+      produto: cel(l, IDX, 'produto') || '(sem produto)', detalhes: cel(l, IDX, 'detalhes'),
+      etapa: cel(l, IDX, 'etapa'),
+      sdr: cel(l, IDX, 'sdr'), closer: cel(l, IDX, 'closer'),
+      agendamento: parseDataBR(cel(l, IDX, 'agendamento')),
+      atendimento: parseDataBR(cel(l, IDX, 'atendimento')),
+      /* Uma coluna de situação só: Atendimento Agendado, Remarcar, Em Negociação,
+         Cliente Ganho ou Lead Perdido. */
+      fechamento: situacao, fe: normTxt(situacao),
+      proposta: parseNumBR(cel(l, IDX, 'proposta')),
+      exito: parseNumBR(cel(l, IDX, 'exito')),
+      motivoPerda: cel(l, IDX, 'motivoPerda'),
+      situacaoNeg: cel(l, IDX, 'situacaoNeg'),
+      ligacao: ehSim(cel(l, IDX, 'ligacao')),
+      fup: ehSim(cel(l, IDX, 'fup'))
     };
   }).filter(r => r.lead);
   const desde2026 = todos.filter(r => r.agendamento && r.agendamento >= INICIO);
@@ -1124,7 +1180,9 @@ function montarBase(crm, fluxo, fluxoErro) {
   const produtos = {};
   leads.forEach(r => { produtos[r.produto] = (produtos[r.produto] || 0) + 1; });
 
-  return { leads, semAtendimento, fechamentos, fluxoErro, meses, produtos, totalLinhas: todos.length };
+  return { leads, semAtendimento, fechamentos, fluxoErro, meses, produtos, totalLinhas: todos.length, IDX,
+           temExito: leads.some(r => r.exito > 0), temDetalhes: leads.some(r => r.detalhes), temEtapa: leads.some(r => r.etapa),
+           temAcompanhamento: IDX.situacaoNeg >= 0 || IDX.ligacao >= 0 || IDX.fup >= 0 };
 }
 
 /* ---------- análise de um recorte ---------- */
@@ -1152,16 +1210,22 @@ const naJanela = (d, j) => d && d >= j.ini && d <= j.fim;
 function analisar(base, meses, produtos, taxaPct, janela) {
   const leads = base.leads.filter(r => janela ? (naJanela(r.atendimento, janela) && (!produtos.size || produtos.has(r.produto)))
                                               : noRecorte(r, meses, produtos));
-  const realizadas = leads.filter(r => r.st === 'realizado');
-  const noShow = leads.filter(r => r.st === 'no show' || r.st === 'noshow' || r.st === 'no-show');
-  const remarcar = leads.filter(r => r.st === 'remarcar');
-  const pendentes = leads.filter(r => r.st === 'agendado');
-  const outros = leads.filter(r => !realizadas.includes(r) && !noShow.includes(r) && !remarcar.includes(r) && !pendentes.includes(r));
+  /* Uma reunião é "realizada" quando já teve desfecho: em negociação, ganha ou
+     perdida. Agendada (ainda vai acontecer) e Remarcar não contam. */
+  const pendentes = leads.filter(r => r.fe === 'atendimento agendado');
+  const remarcar = leads.filter(r => r.fe === 'remarcar');
   const negociacao = leads.filter(r => r.fe === 'em negociacao');
   const ganhos = leads.filter(r => r.fe === 'cliente ganho');
+  const perdidos = leads.filter(r => r.fe === 'lead perdido');
+  const realizadas = leads.filter(r => negociacao.includes(r) || ganhos.includes(r) || perdidos.includes(r));
+  const outros = leads.filter(r => !realizadas.includes(r) && !remarcar.includes(r) && !pendentes.includes(r));
   const comValor = leads.filter(r => r.proposta > 0);
   const ticket = media(comValor.map(r => r.proposta));
   const realizadasComValor = realizadas.filter(r => r.proposta > 0);
+  /* Cliente ganho não carrega proposta nesta planilha (o valor vira honorários
+     no Fluxo de Clientes): só conta como lacuna quem ainda está em negociação
+     ou foi perdido sem valor registrado. */
+  const semValorReal = realizadas.filter(r => !ganhos.includes(r) && !(r.proposta > 0));
   const fluxo = base.fechamentos.filter(f => janela ? (naJanela(f.fechamento, janela) && fluxoNoRecorte(f, new Set([f.mes]), produtos, base))
                                                     : fluxoNoRecorte(f, meses, produtos, base));
   const recebidos = fluxo.filter(f => f.confirmado);
@@ -1171,11 +1235,10 @@ function analisar(base, meses, produtos, taxaPct, janela) {
   const faturado = soma(fluxo, f => f.honorarios);
   const recebido = soma(recebidos, f => f.honorarios);
   return {
-    leads, realizadas, noShow, remarcar, pendentes, outros, negociacao, ganhos, comValor, realizadasComValor,
+    leads, realizadas, perdidos, remarcar, pendentes, outros, negociacao, ganhos, comValor, realizadasComValor,
     valoresNeg: soma(negociacao, r => r.proposta), negSemValor: negociacao.filter(r => !(r.proposta > 0)).length,
-    valorGanhos: soma(ganhos, r => r.proposta),
     ticket, oportunidades: soma(realizadasComValor, r => r.proposta),
-    realizadasSemValor: realizadas.length - realizadasComValor.length,
+    realizadasSemValor: semValorReal.length, semValorReal,
     fluxo, recebidos, faturado, recebido, taxa, esperados, potencial, falta: potencial - faturado,
     comparecimento: leads.length - pendentes.length > 0 ? realizadas.length / (leads.length - pendentes.length) * 100 : null
   };
@@ -1263,12 +1326,36 @@ function pintarChips(base) {
 /* colunas das listas */
 const COL_DATA = (r, chave) => ({ r, chave, formata: v => fmtData(v) });
 const COL_PROP = { r: 'Proposta', chave: 'proposta', alinha: 'dir', formata: v => v > 0 ? moeda(v) : '<span class="sub">sem valor</span>' };
-const COLS_LEAD = [
-  { r: 'Lead', chave: 'lead' }, { r: 'Produto', chave: 'produto' }, { r: 'SDR', chave: 'sdr' }, { r: 'Closer', chave: 'closer' },
-  COL_DATA('Agendado', 'agendamento'), COL_DATA('Atendimento', 'atendimento'),
-  { r: 'Status', chave: 'status' }, { r: 'Fechamento', chave: 'fechamento' }, COL_PROP, { r: 'Telefone', chave: 'telefone' }
-];
-const COLS_NEG = COLS_LEAD.concat([{ r: 'Próx. contato', chave: 'proximoContato' }, { r: 'O que trava', chave: 'travando' }]);
+const COL_SIM = (r, chave) => ({ r, chave, formata: v => v ? '&#10003;' : '<span class="sub">—</span>' });
+const COL_EXITO = { r: 'Êxito', chave: 'exito', alinha: 'dir', formata: v => v > 0 ? moeda(v) : '<span class="sub">—</span>' };
+/* As colunas dependem do que a planilha tem no momento: campo que não existe
+   (ou está inteiro vazio) não vira coluna. */
+function colsLead() {
+  const b = DADOS || {};
+  const cols = [
+    { r: 'Lead', chave: 'lead' }, { r: 'Produto', chave: 'produto' }, { r: 'SDR', chave: 'sdr' }, { r: 'Closer', chave: 'closer' },
+    COL_DATA('Agendado', 'agendamento'), COL_DATA('Atendimento', 'atendimento'),
+    { r: 'Situação', chave: 'fechamento' }, COL_PROP
+  ];
+  if (b.temEtapa) cols.push({ r: 'Etapa do funil', chave: 'etapa' });
+  if (b.temExito) cols.push(COL_EXITO);
+  if (b.temDetalhes) cols.push({ r: 'Detalhes do produto', chave: 'detalhes' });
+  cols.push({ r: 'Telefone', chave: 'telefone' });
+  return cols;
+}
+/* Em negociação: o acompanhamento do closer é o que interessa. */
+function colsNeg() {
+  const b = DADOS || {}, i = b.IDX || {}, cols = colsLead();
+  if (i.situacaoNeg >= 0) cols.push({ r: 'Situação da negociação', chave: 'situacaoNeg' });
+  if (i.ligacao >= 0) cols.push(COL_SIM('Ligação', 'ligacao'));
+  if (i.fup >= 0) cols.push(COL_SIM('FUP', 'fup'));
+  return cols;
+}
+function colsPerda() {
+  const cols = colsLead();
+  if ((DADOS && DADOS.IDX || {}).motivoPerda >= 0) cols.push({ r: 'Motivo da perda', chave: 'motivoPerda' });
+  return cols;
+}
 const COLS_FLUXO = [
   { r: 'Cliente', chave: 'cliente' }, { r: 'Produto', chave: 'produto' }, COL_DATA('Fechamento', 'fechamento'),
   { r: 'Honorários iniciais', chave: 'honorarios', alinha: 'dir', formata: v => moeda(v) },
@@ -1278,7 +1365,7 @@ const COLS_FLUXO = [
 const subRecorte = () => document.getElementById('subFiltro').textContent.replace(/^Recorte:\s*/, '');
 const ordemData = (a, b) => (a.atendimento || 0) - (b.atendimento || 0);
 function listaLeads(titulo, linhas, cols, rodape, notas) {
-  abrirLista({ titulo, sub: subRecorte(), colunas: cols || COLS_LEAD, linhas: linhas.slice().sort(ordemData), rodape, notas, limite: 500,
+  abrirLista({ titulo, sub: subRecorte(), colunas: cols || colsLead(), linhas: linhas.slice().sort(ordemData), rodape, notas, limite: 500,
                vazio: 'Nenhum lead neste recorte.' });
 }
 
@@ -1287,7 +1374,7 @@ function renderKPIs(base, a) {
   const pct = (x, t) => t ? Math.round(x / t * 100) + '%' : '—';
   const cards = [
     cartaoKPI('Reuniões agendadas', num(n), 'azul',
-      '<b>' + a.realizadas.length + '</b> realizadas · ' + a.noShow.length + ' no-show · ' + a.remarcar.length + ' remarcar' +
+      '<b>' + a.realizadas.length + '</b> realizadas · ' + a.remarcar.length + ' remarcar · ' + a.perdidos.length + ' perdidos' +
       (a.pendentes.length ? ' · <span class="alerta">' + a.pendentes.length + ' ainda a realizar</span>' : '')),
     cartaoKPI('Reuniões realizadas', num(a.realizadas.length), 'verde',
       'comparecimento <b>' + pct1(a.comparecimento) + '</b> das já ocorridas', pct(a.realizadas.length, n)),
@@ -1297,26 +1384,26 @@ function renderKPIs(base, a) {
       a.negSemValor ? '<span class="alerta">' + a.negSemValor + ' de ' + a.negociacao.length + ' sem valor de proposta</span>'
                     : 'soma das propostas em negociação'),
     cartaoKPI('Reuniões para remarcar', num(a.remarcar.length), 'roxo', pct(a.remarcar.length, n) + ' das agendadas'),
-    cartaoKPI('No-show', num(a.noShow.length), 'vermelho', pct(a.noShow.length, n) + ' das agendadas', pct(a.noShow.length, n)),
+    cartaoKPI('Leads perdidos', num(a.perdidos.length), 'vermelho', pct(a.perdidos.length, a.realizadas.length) + ' das realizadas', pct(a.perdidos.length, n)),
     cartaoKPI('Ticket médio das propostas', a.comValor.length ? moeda(a.ticket) : '—', 'azul',
-      a.comValor.length ? 'média de <b>' + a.comValor.length + '</b> propostas com valor' : 'nenhuma proposta com valor no recorte'),
+      a.comValor.length ? 'média de <b>' + a.comValor.length + '</b> propostas com valor <span class="sub">(cliente ganho não tem proposta aqui)</span>' : 'nenhuma proposta com valor no recorte'),
     cartaoKPI('Clientes ganhos (CRM)', num(a.ganhos.length), 'verde',
-      pct(a.ganhos.length, a.realizadas.length) + ' das realizadas · ' + (a.valorGanhos ? moedaCurta(a.valorGanhos) + ' em propostas' : 'sem valores'))
+      pct(a.ganhos.length, a.realizadas.length) + ' das realizadas <span class="sub">· o valor fechado vem do Fluxo de Clientes</span>')
   ];
   document.getElementById('kpis').innerHTML = cards.join('');
   const semValor = a.realizadasSemValor;
   ligarKPIs({
     0: () => listaLeads('Reuniões agendadas no recorte', a.leads),
-    1: () => listaLeads('Reuniões realizadas', a.realizadas, COLS_LEAD, null,
-           semValor ? [{ tipo: 'alerta', html: '<b>' + semValor + '</b> realizadas sem Valor da Proposta (coluna M).' }] : null),
-    2: () => listaLeads('Clientes em negociação', a.negociacao, COLS_NEG),
-    3: () => listaLeads('Valores em negociação', a.negociacao.slice().sort((x, y) => y.proposta - x.proposta), COLS_NEG,
+    1: () => listaLeads('Reuniões realizadas', a.realizadas, colsLead(), null,
+           semValor ? [{ tipo: 'alerta', html: '<b>' + semValor + '</b> em negociação ou perdidas sem <b>Valor da Proposta</b> (coluna K).' }] : null),
+    2: () => listaLeads('Clientes em negociação', a.negociacao, colsNeg()),
+    3: () => listaLeads('Valores em negociação', a.negociacao.slice().sort((x, y) => y.proposta - x.proposta), colsNeg(),
            'Total em negociação: <b>' + moeda(a.valoresNeg) + '</b>' + (a.negSemValor ? ' · ' + a.negSemValor + ' sem valor' : '')),
     4: () => listaLeads('Reuniões para remarcar', a.remarcar),
-    5: () => listaLeads('No-show', a.noShow),
-    6: () => listaLeads('Propostas com valor', a.comValor.slice().sort((x, y) => y.proposta - x.proposta), COLS_LEAD,
+    5: () => listaLeads('Leads perdidos', a.perdidos, colsPerda()),
+    6: () => listaLeads('Propostas com valor', a.comValor.slice().sort((x, y) => y.proposta - x.proposta), colsLead(),
            'Ticket médio: <b>' + moeda(a.ticket) + '</b> · ' + a.comValor.length + ' propostas'),
-    7: () => listaLeads('Clientes ganhos no CRM', a.ganhos, COLS_LEAD, a.valorGanhos ? 'Propostas dos ganhos: <b>' + moeda(a.valorGanhos) + '</b>' : null)
+    7: () => listaLeads('Clientes ganhos no CRM', a.ganhos)
   });
 }
 
@@ -1336,11 +1423,11 @@ function renderProjecao(base) {
   const prod = FILTRO.produtos.size ? [...FILTRO.produtos].join(' + ') : 'todos os produtos';
   document.getElementById('subJanela').innerHTML = 'Janela: <b>' + esc(jan.rotulo) + '</b> · <b>' + esc(prod) + '</b> · independe do mês marcado no menu';
   const subLista = () => jan.rotulo + ' · ' + prod;
-  const lista = (titulo, linhas, cols, rodape) => abrirLista({ titulo, sub: subLista(), colunas: cols || COLS_LEAD, linhas: linhas.slice().sort(ordemData), rodape, limite: 500, vazio: 'Nenhum lead nesta janela.' });
+  const lista = (titulo, linhas, cols, rodape) => abrirLista({ titulo, sub: subLista(), colunas: cols || colsLead(), linhas: linhas.slice().sort(ordemData), rodape, limite: 500, vazio: 'Nenhum lead nesta janela.' });
   const itens = [
     ['Reuniões realizadas', num(a.realizadas.length), 'atendimentos realizados na janela', null, () => lista('Reuniões realizadas — ' + jan.rotulo, a.realizadas)],
     ['Oportunidades', moeda(a.oportunidades), a.realizadasSemValor ? a.realizadasSemValor + ' realizadas sem valor de proposta' : 'soma das propostas dos realizados', null,
-      () => lista('Oportunidades — propostas dos atendimentos realizados', a.realizadasComValor.slice().sort((x, y) => y.proposta - x.proposta), COLS_LEAD, 'Total: <b>' + moeda(a.oportunidades) + '</b>')],
+      () => lista('Oportunidades — propostas dos atendimentos realizados', a.realizadasComValor.slice().sort((x, y) => y.proposta - x.proposta), colsLead(), 'Total: <b>' + moeda(a.oportunidades) + '</b>')],
     ['Ticket médio', a.comValor.length ? moeda(a.ticket) : '—', a.comValor.length + ' propostas com valor na janela', null],
     ['Clientes esperados', a.esperados.toFixed(1).replace('.', ','), num(a.realizadas.length) + ' × ' + FILTRO.taxa + '%', null],
     ['Potencial de faturamento', moeda(a.potencial), 'esperados × ticket médio', COR_AZUL],
@@ -1403,8 +1490,9 @@ function renderGraficos(base, a) {
       scales: { y: { beginAtZero: true, grid: { color: COR_BORDA } }, x: { grid: { display: false } } } }
   });
   destruir('grafStatus');
-  const partes = [['Realizadas', a.realizadas.length, COR_VERDE], ['No-show', a.noShow.length, COR_VERMELHO],
-                  ['Remarcar', a.remarcar.length, COR_ROXO], ['A realizar', a.pendentes.length, COR_AZUL], ['Outros', a.outros.length, COR_MUTED]].filter(p => p[1]);
+  const partes = [['Cliente ganho', a.ganhos.length, COR_VERDE], ['Em negociação', a.negociacao.length, COR_AMARELO],
+                  ['Lead perdido', a.perdidos.length, COR_VERMELHO], ['Remarcar', a.remarcar.length, COR_ROXO],
+                  ['A realizar', a.pendentes.length, COR_AZUL], ['Sem situação', a.outros.length, COR_MUTED]].filter(p => p[1]);
   graficos.grafStatus = new Chart(document.getElementById('grafStatus'), {
     type: 'doughnut',
     data: { labels: partes.map(p => p[0]), datasets: [{ data: partes.map(p => p[1]), backgroundColor: partes.map(p => hexA(p[2], .75)), borderColor: 'transparent' }] },
@@ -1420,7 +1508,7 @@ function renderMeses(base) {
     return '<tr data-mes="' + m + '" class="clicavel' + (FILTRO.meses.has(m) ? ' mes-ativo' : '') + '" title="Levar este mês para os cartões">' +
       '<td>' + rotuloMes(m) + (x.pendentes.length ? ' <span class="sub">(' + x.pendentes.length + ' a realizar)</span>' : '') + '</td>' +
       td(num(x.leads.length)) + td(num(x.realizadas.length)) + td(pct0(x.comparecimento)) +
-      td(num(x.noShow.length), x.leads.length && x.noShow.length / x.leads.length > .1 ? 'val-neg' : '') + td(num(x.remarcar.length)) +
+      td(num(x.perdidos.length), x.realizadas.length && x.perdidos.length / x.realizadas.length > .15 ? 'val-neg' : '') + td(num(x.remarcar.length)) +
       td(num(x.negociacao.length)) + td(x.valoresNeg ? moedaCurta(x.valoresNeg) : '—') + td(num(x.ganhos.length)) +
       td(x.comValor.length ? moedaCurta(x.ticket) : '—') + td(x.faturado ? moedaCurta(x.faturado) : '—') + td(x.recebido ? moedaCurta(x.recebido) : '—') + '</tr>';
   }).join('');
@@ -1428,16 +1516,25 @@ function renderMeses(base) {
 
 function renderObs(base, a) {
   const obs = [];
+  if (base.IDX && base.IDX._ausentes.length) obs.push(obsCard('critico', '&#9888;', 'Coluna esperada não encontrada na planilha',
+    'Não achei <b>' + base.IDX._ausentes.map(esc).join('</b>, <b>') + '</b> no cabeçalho da aba <b>Fluxo de Atendimentos</b>. ' +
+    'As medidas que dependem desses campos ficam zeradas até a coluna voltar (ou ser renomeada de volta).'));
   if (base.fluxoErro) obs.push(obsCard('critico', '&#9888;', 'Fluxo de Clientes não carregou',
     'Faturado e recebido estão zerados porque a planilha do Fluxo não respondeu (' + esc(base.fluxoErro) + ').'));
-  if (a.realizadasSemValor) obs.push(obsCard('atencao', '&#9998;', a.realizadasSemValor + ' reuniões realizadas sem valor de proposta',
-    'De <b>' + a.realizadas.length + '</b> realizadas no recorte, <b>' + a.realizadasSemValor + '</b> estão com a coluna <b>Valor da Proposta</b> vazia. ' +
+  if (a.realizadasSemValor) obs.push(obsCard('atencao', '&#9998;', a.realizadasSemValor + ' negociações sem valor de proposta',
+    'Leads <b>em negociação</b> ou <b>perdidos</b> com a coluna <b>Valor da Proposta</b> vazia. ' +
     'Ticket médio, valores em negociação e projeção consideram só as preenchidas — o potencial real tende a ser maior.'));
   if (a.pendentes.length) obs.push(obsCard('info', '&#128197;', a.pendentes.length + ' reuniões ainda a realizar no recorte',
-    'Estão com status <b>Agendado</b> (' + a.pendentes.map(r => esc(r.lead) + ' em ' + fmtData(r.atendimento)).slice(0, 4).join(', ') + (a.pendentes.length > 4 ? '…' : '') + ').'));
+    'Estão como <b>Atendimento Agendado</b> (' + a.pendentes.map(r => esc(r.lead) + ' em ' + fmtData(r.atendimento)).slice(0, 4).join(', ') + (a.pendentes.length > 4 ? '…' : '') + ').'));
   const ocorridas = a.leads.length - a.pendentes.length;
-  if (ocorridas && a.noShow.length / ocorridas > .1) obs.push(obsCard('atencao', '&#128683;', 'No-show acima de 10%',
-    '<b>' + a.noShow.length + '</b> de ' + ocorridas + ' reuniões que já deveriam ter ocorrido não aconteceram (' + pct1(a.noShow.length / ocorridas * 100) + ').'));
+  if (ocorridas && a.remarcar.length / ocorridas > .1) obs.push(obsCard('atencao', '&#128683;', 'Remarcações acima de 10%',
+    '<b>' + a.remarcar.length + '</b> de ' + ocorridas + ' reuniões que já deveriam ter ocorrido ficaram para remarcar (' + pct1(a.remarcar.length / ocorridas * 100) + ').'));
+  if (a.perdidos.length && (base.IDX || {}).motivoPerda >= 0) { const semMotivo = a.perdidos.filter(r => !r.motivoPerda).length;
+    if (semMotivo) obs.push(obsCard('info', '&#128269;', semMotivo + ' de ' + a.perdidos.length + ' leads perdidos sem motivo registrado',
+      'A coluna <b>Motivo de Perda do Lead</b> está vazia nesses casos — sem ela não dá para agir sobre a causa da perda.')); }
+  if (a.negociacao.length && base.temAcompanhamento) { const semFup = a.negociacao.filter(r => !r.fup).length, semLig = a.negociacao.filter(r => !r.ligacao).length;
+    if (semFup === a.negociacao.length && semLig === a.negociacao.length) obs.push(obsCard('info', '&#9742;', 'Follow-up não registrado nas negociações',
+      'Nenhum dos <b>' + a.negociacao.length + '</b> leads em negociação tem <b>ligação</b> ou <b>FUP no grupo</b> marcados na planilha.')); }
   if (a.ganhos.length !== a.fluxo.length && !base.fluxoErro) obs.push(obsCard('info', '&#8646;', 'CRM e Fluxo de Clientes não batem no recorte',
     'O CRM marca <b>' + a.ganhos.length + '</b> clientes ganhos pelo mês do atendimento; o Fluxo registra <b>' + a.fluxo.length + '</b> fechamentos pelo mês do fechamento. ' +
     'A diferença é normal quando o lead fecha em mês diferente da reunião' + (FILTRO.produtos.size ? ' ou quando o nome do produto difere entre as planilhas' : '') + '.'));
@@ -1448,6 +1545,8 @@ function renderObs(base, a) {
   }
   if (base.semAtendimento.length) obs.push(obsCard('info', '&#9203;', base.semAtendimento.length + ' leads agendados sem data de atendimento',
     'Têm Data do Agendamento em 2026 mas a Data do Atendimento está vazia; ficam fora de todas as medidas até serem preenchidos.'));
+  if (a.outros.length) obs.push(obsCard('atencao', '&#10067;', a.outros.length + ' leads sem situação preenchida',
+    'A coluna <b>Status de Fechamento</b> está vazia; eles entram em "reuniões agendadas" mas não contam como realizadas.'));
   if (!obs.length) obs.push('<div class="obs-vazio">Nada a apontar neste recorte.</div>');
   document.getElementById('obsLista').innerHTML = obs.join('');
 }
