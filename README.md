@@ -20,9 +20,11 @@ neste painel. Entra-se pela [Central de Dashboards](https://borgesmacedoadvocaci
   (os cartões somam os meses marcados) e um ou mais produtos jurídicos.
 - Leads com data de agendamento mas sem data de atendimento ficam fora das medidas e são
   apontados em "Pontos de atenção".
-- A planilha tem **uma coluna de situação só** (`Status de Fechamento`): *Atendimento Agendado*,
-  *Remarcar*, *Em Negociação*, *Cliente Ganho* e *Lead Perdido*. Uma reunião conta como
-  **realizada** quando já teve desfecho — em negociação, ganha ou perdida.
+- A planilha tem **uma coluna de situação só**. Ela já se chamou `Status de Fechamento` e hoje é
+  **`Etapa do Funil`** (28/09/2026); o painel aceita as duas, com os rótulos antigos e novos
+  (*Reunião Agendada* = *Atendimento Agendado*, *Remarcar Reunião* = *Remarcar*, além de
+  *Em Negociação*, *Cliente Ganho* e *Lead Perdido*). Uma reunião conta como **realizada**
+  quando já teve desfecho — em negociação, ganha ou perdida.
 
 | Cartão | Como é calculado |
 |---|---|
@@ -44,8 +46,10 @@ situação, proposta, telefone; nas negociações também *Situação da Negocia
 e *FUP*; nos perdidos, o motivo). *Honorários de Êxito* aparece sozinho nas listas quando a
 planilha passar a preenchê-lo.
 
-As colunas **ID**, **Detalhes do Produto Jurídico** e **Etapa do Funil** são ignoradas de
-propósito — o painel não as lê nem as exibe.
+As colunas **ID** e **Detalhes do Produto Jurídico** são ignoradas de propósito — o painel não as
+lê nem as exibe. *Etapa do Funil* também era ignorada até 28/09/2026, quando a planilha passou a
+guardar nela o status do lead: como virou a única fonte de situação, voltou a ser lida (só como
+situação, não como coluna extra). Os 9 pares de **Follow Up [Status]/[Data]** ainda não são usados.
 
 ## Projeção de recebimento — últimos 30 e 60 dias
 

@@ -1091,7 +1091,11 @@ const CAMPOS_CRM = {
   closer:      { exato: ['closer'] },
   agendamento: { exato: ['data do agendamento'], contem: [['data', 'agendamento']] },
   atendimento: { exato: ['data do atendimento'], contem: [['data', 'atendimento']] },
-  situacao:    { exato: ['status de fechamento', 'status do fechamento', 'situacao'], contem: [['status', 'fechamento']] },
+  /* O status já morou em 'Status de Fechamento' e hoje vive em 'Etapa do Funil'
+     — as duas formas são aceitas, na ordem em que a planilha as usou. */
+  situacao:    { exato: ['status de fechamento', 'status do fechamento', 'etapa do funil'], contem: [['status', 'fechamento'], ['etapa', 'funil']] },
+  temperatura: { contem: [['temperatura']] },
+  diasNeg:     { contem: [['dias', 'negociacao']] },
   proposta:    { exato: ['valor da proposta'], contem: [['proposta', 'inicia'], ['honorarios', 'inicia']] },
   exito:       { contem: [['proposta', 'exito'], ['honorarios', 'exito']] },
   motivoPerda: { contem: [['motivo', 'perda']] },
@@ -1121,7 +1125,7 @@ function mapearColunas(cab) {
   });
   idx._cab = cab;
   idx._ausentes = ['lead', 'atendimento', 'situacao', 'proposta'].filter(k => idx[k] < 0)
-    .map(k => ({ lead: 'Lead', atendimento: 'Data do Atendimento', situacao: 'Status de Fechamento', proposta: 'Valor da Proposta (Honorários Iniciais)' })[k]);
+    .map(k => ({ lead: 'Lead', atendimento: 'Data do Atendimento', situacao: 'Etapa do Funil (ou Status de Fechamento)', proposta: 'Valor da Proposta (Honorários Iniciais)' })[k]);
   return idx;
 }
 const cel = (l, idx, chave) => { const i = idx[chave]; if (i < 0) return ''; const v = l[i]; return v === undefined || v === null ? '' : String(v).trim(); };
@@ -1144,6 +1148,8 @@ function montarBase(crm, fluxo, fluxoErro) {
       fechamento: situacao, fe: normTxt(situacao),
       proposta: parseNumBR(cel(l, IDX, 'proposta')),
       exito: parseNumBR(cel(l, IDX, 'exito')),
+      temperatura: cel(l, IDX, 'temperatura'),
+      diasNeg: cel(l, IDX, 'diasNeg'),
       motivoPerda: cel(l, IDX, 'motivoPerda'),
       situacaoNeg: cel(l, IDX, 'situacaoNeg'),
       ligacao: ehSim(cel(l, IDX, 'ligacao')),
@@ -1179,7 +1185,7 @@ function montarBase(crm, fluxo, fluxoErro) {
   leads.forEach(r => { produtos[r.produto] = (produtos[r.produto] || 0) + 1; });
 
   return { leads, semAtendimento, fechamentos, fluxoErro, meses, produtos, totalLinhas: todos.length, IDX,
-           temExito: leads.some(r => r.exito > 0),
+           temExito: leads.some(r => r.exito > 0), temTemperatura: leads.some(r => r.temperatura), temDiasNeg: leads.some(r => r.diasNeg),
            temAcompanhamento: IDX.situacaoNeg >= 0 || IDX.ligacao >= 0 || IDX.fup >= 0 };
 }
 
@@ -1210,8 +1216,8 @@ function analisar(base, meses, produtos, taxaPct, janela) {
                                               : noRecorte(r, meses, produtos));
   /* Uma reunião é "realizada" quando já teve desfecho: em negociação, ganha ou
      perdida. Agendada (ainda vai acontecer) e Remarcar não contam. */
-  const pendentes = leads.filter(r => r.fe === 'atendimento agendado');
-  const remarcar = leads.filter(r => r.fe === 'remarcar');
+  const pendentes = leads.filter(r => r.fe === 'atendimento agendado' || r.fe === 'reuniao agendada');
+  const remarcar = leads.filter(r => r.fe === 'remarcar' || r.fe === 'remarcar reuniao');
   const negociacao = leads.filter(r => r.fe === 'em negociacao');
   const ganhos = leads.filter(r => r.fe === 'cliente ganho');
   const perdidos = leads.filter(r => r.fe === 'lead perdido');
@@ -1342,6 +1348,8 @@ function colsLead() {
 /* Em negociação: o acompanhamento do closer é o que interessa. */
 function colsNeg() {
   const b = DADOS || {}, i = b.IDX || {}, cols = colsLead();
+  if (b.temTemperatura) cols.push({ r: 'Temperatura', chave: 'temperatura' });
+  if (b.temDiasNeg) cols.push({ r: 'Dias em neg.', chave: 'diasNeg', alinha: 'dir' });
   if (i.situacaoNeg >= 0) cols.push({ r: 'Situação da negociação', chave: 'situacaoNeg' });
   if (i.ligacao >= 0) cols.push(COL_SIM('Ligação', 'ligacao'));
   if (i.fup >= 0) cols.push(COL_SIM('FUP', 'fup'));
@@ -1521,7 +1529,7 @@ function renderObs(base, a) {
     'Leads <b>em negociação</b> ou <b>perdidos</b> com a coluna <b>Valor da Proposta</b> vazia. ' +
     'Ticket médio, valores em negociação e projeção consideram só as preenchidas — o potencial real tende a ser maior.'));
   if (a.pendentes.length) obs.push(obsCard('info', '&#128197;', a.pendentes.length + ' reuniões ainda a realizar no recorte',
-    'Estão como <b>Atendimento Agendado</b> (' + a.pendentes.map(r => esc(r.lead) + ' em ' + fmtData(r.atendimento)).slice(0, 4).join(', ') + (a.pendentes.length > 4 ? '…' : '') + ').'));
+    'Ainda não aconteceram (' + a.pendentes.map(r => esc(r.lead) + ' em ' + fmtData(r.atendimento)).slice(0, 4).join(', ') + (a.pendentes.length > 4 ? '…' : '') + ').'));
   const ocorridas = a.leads.length - a.pendentes.length;
   if (ocorridas && a.remarcar.length / ocorridas > .1) obs.push(obsCard('atencao', '&#128683;', 'Remarcações acima de 10%',
     '<b>' + a.remarcar.length + '</b> de ' + ocorridas + ' reuniões que já deveriam ter ocorrido ficaram para remarcar (' + pct1(a.remarcar.length / ocorridas * 100) + ').'));
