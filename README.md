@@ -41,8 +41,11 @@ neste painel. Entra-se pela [Central de Dashboards](https://borgesmacedoadvocaci
 
 Todo cartão abre a lista dos leads por trás do número (nome, produto, SDR, closer, datas,
 situação, proposta, telefone; nas negociações também *Situação da Negociação (Closer)*, *ligação*
-e *FUP*; nos perdidos, o motivo). Colunas que a planilha vier a preencher — *Etapa do Funil*,
-*Detalhes do Produto Jurídico*, *Honorários de Êxito* — aparecem sozinhas nas listas.
+e *FUP*; nos perdidos, o motivo). *Honorários de Êxito* aparece sozinho nas listas quando a
+planilha passar a preenchê-lo.
+
+As colunas **ID**, **Detalhes do Produto Jurídico** e **Etapa do Funil** são ignoradas de
+propósito — o painel não as lê nem as exibe.
 
 ## Projeção de recebimento — últimos 30 e 60 dias
 

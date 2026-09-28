@@ -1082,12 +1082,11 @@ function produtoCasa(chaveCrm, chaveFl) {
    igual, depois por palavras-chave — e nunca pela posição: uma coluna a mais no
    começo faria o painel ler o campo errado sem avisar. */
 const CAMPOS_CRM = {
-  id:          { exato: ['id'] },
   lead:        { exato: ['lead', 'cliente', 'nome do lead'] },
   telefone:    { exato: ['telefone', 'whatsapp'] },
+  /* ID, Detalhes do Produto Jurídico e Etapa do Funil ficam de fora a pedido:
+     'evitar' impede que "Detalhes do Produto Jurídico" seja lido como produto. */
   produto:     { exato: ['produto juridico'], contem: [['produto', 'juridico']], evitar: ['detalhe'] },
-  detalhes:    { contem: [['detalhe', 'produto']] },
-  etapa:       { exato: ['etapa do funil'], contem: [['etapa']] },
   sdr:         { exato: ['sdr'] },
   closer:      { exato: ['closer'] },
   agendamento: { exato: ['data do agendamento'], contem: [['data', 'agendamento']] },
@@ -1136,8 +1135,7 @@ function montarBase(crm, fluxo, fluxoErro) {
     return {
       linha: i + 2,
       lead: cel(l, IDX, 'lead'), telefone: cel(l, IDX, 'telefone'),
-      produto: cel(l, IDX, 'produto') || '(sem produto)', detalhes: cel(l, IDX, 'detalhes'),
-      etapa: cel(l, IDX, 'etapa'),
+      produto: cel(l, IDX, 'produto') || '(sem produto)',
       sdr: cel(l, IDX, 'sdr'), closer: cel(l, IDX, 'closer'),
       agendamento: parseDataBR(cel(l, IDX, 'agendamento')),
       atendimento: parseDataBR(cel(l, IDX, 'atendimento')),
@@ -1181,7 +1179,7 @@ function montarBase(crm, fluxo, fluxoErro) {
   leads.forEach(r => { produtos[r.produto] = (produtos[r.produto] || 0) + 1; });
 
   return { leads, semAtendimento, fechamentos, fluxoErro, meses, produtos, totalLinhas: todos.length, IDX,
-           temExito: leads.some(r => r.exito > 0), temDetalhes: leads.some(r => r.detalhes), temEtapa: leads.some(r => r.etapa),
+           temExito: leads.some(r => r.exito > 0),
            temAcompanhamento: IDX.situacaoNeg >= 0 || IDX.ligacao >= 0 || IDX.fup >= 0 };
 }
 
@@ -1337,9 +1335,7 @@ function colsLead() {
     COL_DATA('Agendado', 'agendamento'), COL_DATA('Atendimento', 'atendimento'),
     { r: 'Situação', chave: 'fechamento' }, COL_PROP
   ];
-  if (b.temEtapa) cols.push({ r: 'Etapa do funil', chave: 'etapa' });
   if (b.temExito) cols.push(COL_EXITO);
-  if (b.temDetalhes) cols.push({ r: 'Detalhes do produto', chave: 'detalhes' });
   cols.push({ r: 'Telefone', chave: 'telefone' });
   return cols;
 }
