@@ -1122,9 +1122,9 @@ async function buscarTudo() {
      reabrir o compartilhamento, não como rede de segurança.
      Intervalo largo de propósito: a planilha ganha colunas com frequência e o
      mapeamento é por cabeçalho, então sobra espaço sem custo. */
-  const [crm] = await lerAbasDe(CONFIG.SHEET_ID, [ABA_CRM + '!A1:AZ3000']);
+  const [crm] = await lerAbasDe(CONFIG.SHEET_ID, [ABA_CRM + '!A:AZ']);
   let fluxo = [], fluxoErro = '';
-  try { [fluxo] = await lerAbasDe(CONFIG.FLUXO_SHEET_ID, [ABA_FLUXO + '!A1:R3000']); }
+  try { [fluxo] = await lerAbasDe(CONFIG.FLUXO_SHEET_ID, [ABA_FLUXO + '!A:R']); }
   catch (e) { fluxoErro = e.message; }
   return montarBase(tabela(crm), tabela(fluxo), fluxoErro);
 }
